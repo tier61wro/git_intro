@@ -1,0 +1,25 @@
+pull_request_rules:
+  - name: Stale test
+    conditions:
+      - -closed
+    actions:
+      post_check:
+        success_conditions:
+          - "updated-at < 2 days ago"
+      
+        title: |
+          {% if check_status == "success" %}
+          PR is fresh (< 2 days)
+          {% else %}
+          PR is stale (≥ 2 days)
+          {% endif %}
+      
+        summary: |
+          {% set ts = pull_request.updated_at %}
+          {% set human = ts | replace("T", " ") | replace("Z", "") %}
+          Last activity (UTC): **{{ human }}**
+      
+          {% if check_status == "failure" %}
+          This pull request hasn’t been updated for more than two days.  
+          Please rebase/merge with the latest changes from the target branch.
+          {% endif %}
