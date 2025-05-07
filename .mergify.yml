@@ -20,4 +20,11 @@ pull_request_rules:
           {% if check_status == "failure" %}
           This pull request hasn’t been updated for more than two days.
           Please rebase/merge with the latest changes from the target branch.
-          {% endif %}
+          {% endif %} 
+  - name: Skip large PRs
+    conditions:
+      - files>=2
+    actions:
+      comment:
+        message: "Too many files, skipping Mergify checks."
+    
