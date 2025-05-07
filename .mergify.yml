@@ -16,10 +16,7 @@ pull_request_rules:
           {% endif %}
       
         summary: |
-          {% set human = updated_at | replace("T", " ") | replace("Z", "") %}
-          Last activity (UTC): **{{ human }}**
-      
           {% if check_status == "failure" %}
-          This pull request hasn’t been updated for more than two days.  
+          This pull request hasn’t been updated for more than two days.
           Please rebase/merge with the latest changes from the target branch.
           {% endif %}
