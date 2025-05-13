@@ -1,30 +1,50 @@
 # updated
 pull_request_rules:
-  - name: Stale test
+  # - name: Stale test
+  #   conditions:
+  #     - -closed
+  #   actions:
+  #     post_check:
+  #       success_conditions:
+  #         #- "updated-at < 2 days ago"
+  #         - "updated-at > 10 minutes ago"
+      
+  #       title: |
+  #         {% if check_status == "success" %}
+  #         PR is fresh (< 10 min)
+  #         {% else %}
+  #         PR is stale (≥ 10 min)
+  #         {% endif %}
+      
+  #       summary: |
+  #         {% if check_status == "failure" %}
+  #         This pull request hasn’t been updated for more than two days.
+  #         Please rebase/merge with the latest changes from the target branch.
+  #         {% endif %} 
+  # - name: Skip large PRs
+  #   conditions:
+  #     - files>=2
+  #   actions:
+  #     comment:
+  #       message: "Too many files, skipping Mergify checks."
+
+  - name: Stable branches PR freshness check
     conditions:
+      - base~="^stable/\d{4}$"
       - -closed
     actions:
       post_check:
+        # Чек зелёный, если PR не старше 4 дней
         success_conditions:
-          #- "updated-at < 2 days ago"
           - "updated-at > 10 minutes ago"
-      
         title: |
           {% if check_status == "success" %}
-          PR is fresh (< 10 min)
+          PR is fresh (< 4 days)
           {% else %}
-          PR is stale (≥ 10 min)
+          PR is stale (≥ 4 days)
           {% endif %}
-      
         summary: |
           {% if check_status == "failure" %}
-          This pull request hasn’t been updated for more than two days.
+          This pull request hasn’t been updated for more than four days.
           Please rebase/merge with the latest changes from the target branch.
-          {% endif %} 
-  - name: Skip large PRs
-    conditions:
-      - files>=2
-    actions:
-      comment:
-        message: "Too many files, skipping Mergify checks."
-    
+          {% endif %}
